@@ -1,0 +1,43 @@
+name: Build All-in-One Offline Add-in
+
+on:
+  workflow_dispatch: # This allows you to trigger the build manually by clicking a button in GitHub
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install Compiler and Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install fastapi uvicorn pydantic httpx pyinstaller llama-cpp-python
+
+    - name: Download AI Models
+      run: |
+        mkdir models
+        
+        # Download the lightweight Phi-3 model
+        curl -L -o models/phi-3-mini-4k-instruct-q4.gguf "https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/resolve/main/Phi-3-mini-4k-instruct-q4.gguf"
+        
+        # Download the heavier Llama-3-8B model (optimized for 16GB RAM)
+        curl -L -o models/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf "https://huggingface.co/QuantFactory/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct.Q4_K_M.gguf"
+
+    - name: Compile Single Executable
+      run: |
+        # Bundles the web files (addin folder) and the AI models directly into the exe
+        pyinstaller --name "OfficeAI-Offline" --onefile --add-data "addin;addin" --add-data "models;models" main.py
+
+    - name: Upload Final Application
+      uses: actions/upload-artifact@v4
+      with:
+        name: OfficeAI-Final-Download
+        path: dist/OfficeAI-Offline.exe
