@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:type="TaskPaneApp">
+
+  <!-- App identity -->
+  <Id>a1b2c3d4-e5f6-7890-abcd-ef1234567890</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Office AI Add-in</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+
+  <DisplayName DefaultValue="Office AI" />
+  <Description DefaultValue="AI assistant for Word, Excel, and PowerPoint — local and cloud." />
+
+  <!-- Icons (replace with real icon URLs before publishing) -->
+  <IconUrl DefaultValue="https://localhost:8000/addin/icon-32.png" />
+  <HighResolutionIconUrl DefaultValue="https://localhost:8000/addin/icon-80.png" />
+
+  <SupportUrl DefaultValue="http://localhost:8000" />
+
+  <!-- Hosts this add-in supports -->
+  <Hosts>
+    <Host Name="Document" />   <!-- Word -->
+    <Host Name="Workbook" />   <!-- Excel -->
+    <Host Name="Presentation"/><!-- PowerPoint -->
+  </Hosts>
+
+  <DefaultSettings>
+    <!-- Point to the task pane served by your Python backend -->
+    <SourceLocation DefaultValue="http://localhost:8000/addin/taskpane.html" />
+  </DefaultSettings>
+
+  <Permissions>ReadWriteDocument</Permissions>
+
+</OfficeApp>
